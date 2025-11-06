@@ -38,7 +38,7 @@ const BookMeal = () => {
       
       // Redirect to dashboard after 2 seconds
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/student/dashboard');
       }, 2000);
     } catch (error) {
       setMessage({
@@ -69,7 +69,7 @@ const BookMeal = () => {
         <div className="bg-contentBg rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold text-textDark">Book Meals for Tomorrow</h1>
-            <Link to="/dashboard" className="text-primary hover:underline">
+            <Link to="/student/dashboard" className="text-primary hover:underline">
               ← Back
             </Link>
           </div>

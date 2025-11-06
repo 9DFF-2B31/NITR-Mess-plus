@@ -1,7 +1,6 @@
 const Student = require('../models/Student');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const cloudinary = require('../config/cloudinary');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -15,38 +14,27 @@ const generateToken = (id) => {
 // @access  Public
 const signup = async (req, res) => {
   try {
-    const { rollNo, password, name, messName, photoBase64 } = req.body;
+    const { rollNo, password, name, messName, photoUrl } = req.body;
 
     // Check if student already exists
     const studentExists = await Student.findOne({ rollNo });
     if (studentExists) {
-      return res.status(400).json({ message: 'Student already exists with this roll number' });
+      return res
+        .status(400)
+        .json({ message: 'Student already exists with this roll number' });
     }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Upload photo to Cloudinary (if provided)
-    let photoData = {};
-    if (photoBase64) {
-      const uploadResult = await cloudinary.uploader.upload(photoBase64, {
-        folder: 'nitr-mess-plus/students',
-        resource_type: 'image'
-      });
-      photoData = {
-        public_id: uploadResult.public_id,
-        url: uploadResult.secure_url
-      };
-    }
-
-    // Create student
+    // Create student (store only Cloudinary URL)
     const student = await Student.create({
       rollNo,
       password: hashedPassword,
       name,
       messName,
-      photo: photoData
+      photoURL: photoUrl || '' 
     });
 
     if (student) {
@@ -55,7 +43,7 @@ const signup = async (req, res) => {
         rollNo: student.rollNo,
         name: student.name,
         messName: student.messName,
-        photo: student.photo,
+        photoURL: student.photoURL, // just URL string
         tokens: student.tokens,
         role: student.role,
         token: generateToken(student._id)
@@ -73,7 +61,6 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { rollNo, password } = req.body;
-
     // Find student
     const student = await Student.findOne({ rollNo });
     if (!student) {

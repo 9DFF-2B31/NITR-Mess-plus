@@ -5,7 +5,6 @@ import Navbar from '../../components/Navbar';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
-
   return (
     <div className="min-h-screen bg-pageBg">
       <Navbar />
@@ -13,9 +12,9 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="bg-contentBg rounded-lg shadow-lg p-8 mb-8">
           <div className="flex items-center gap-6">
-            {user.photo?.url ? (
+            {user.photoURL ? (
               <img
-                src={user.photo.url}
+                src={user.photoURL}
                 alt={user.name}
                 className="w-24 h-24 rounded-full object-cover border-4 border-primary"
               />
@@ -28,7 +27,7 @@ const Dashboard = () => {
             <div>
               <h1 className="text-3xl font-bold text-textDark">{user.name}</h1>
               <p className="text-gray-600">Roll No: {user.rollNo}</p>
-              <p className="text-gray-600">Mess: {user.messName}</p>
+              <p className="text-gray-600">Mess: GDB Hall</p>
             </div>
           </div>
         </div>

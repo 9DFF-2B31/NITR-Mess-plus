@@ -41,7 +41,7 @@ const ViewTokens = () => {
         <div className="bg-contentBg rounded-lg shadow-lg p-8">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold text-textDark">Your Meal Tokens</h1>
-            <Link to="/dashboard" className="text-primary hover:underline">
+            <Link to="/student/dashboard" className="text-primary hover:underline">
               ← Back to Dashboard
             </Link>
           </div>

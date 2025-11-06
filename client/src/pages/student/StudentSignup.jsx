@@ -2,13 +2,12 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
-const Signup = () => {
+const StudentSignup = () => {
   const [formData, setFormData] = useState({
     rollNo: '',
     password: '',
     name: '',
-    messName: '',
-    photo: null
+    photo: null,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,22 +23,34 @@ const Signup = () => {
     }
   };
 
+  const uploadToCloudinary = async (file) => {
+    const data = new FormData();
+    data.append('file', file);
+    // 👇 replace with your own unsigned upload preset and Cloudinary cloud name
+    data.append('upload_preset', 'nitr_unsigned');
+    data.append('cloud_name', 'dhgflpbge');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/dhgflpbge/image/upload', {
+      method: 'POST',
+      body: data,
+    });
+
+    const json = await res.json();
+    if (!json.secure_url) throw new Error('Cloudinary upload failed');
+    return json.secure_url;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      let photoBase64 = '';
-      
-      // Convert photo to base64 if provided
+      let photoUrl = '';
+
+      // Upload to Cloudinary if photo selected
       if (formData.photo) {
-        const reader = new FileReader();
-        photoBase64 = await new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(formData.photo);
-        });
+        photoUrl = await uploadToCloudinary(formData.photo);
       }
 
       await signup({
@@ -47,12 +58,13 @@ const Signup = () => {
         password: formData.password,
         name: formData.name,
         messName: formData.messName,
-        photoBase64
+        photoUrl, // ✅ send only Cloudinary URL
       });
 
-      navigate('/dashboard');
+      navigate('/student/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed');
+      console.error(err);
+      setError(err.response?.data?.message || err.message || 'Signup failed');
     } finally {
       setLoading(false);
     }
@@ -82,7 +94,7 @@ const Signup = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary"
               required
-              placeholder="e.g., 123CS1001"
+              placeholder="e.g., 123CS0000"
             />
           </div>
 
@@ -111,22 +123,6 @@ const Signup = () => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-textDark mb-2">Mess Name</label>
-            <select
-              name="messName"
-              value={formData.messName}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary"
-              required
-            >
-              <option value="">Select Mess</option>
-              <option value="Mess A">Mess A</option>
-              <option value="Mess B">Mess B</option>
-              <option value="Mess C">Mess C</option>
-            </select>
-          </div>
-
           <div className="mb-6">
             <label className="block text-textDark mb-2">Profile Photo (Optional)</label>
             <input
@@ -149,7 +145,7 @@ const Signup = () => {
 
         <p className="text-center mt-6 text-textDark">
           Already have an account?{' '}
-          <Link to="/login" className="text-primary hover:underline">
+          <Link to="student/login" className="text-primary hover:underline">
             Login here
           </Link>
         </p>
@@ -158,4 +154,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default StudentSignup;

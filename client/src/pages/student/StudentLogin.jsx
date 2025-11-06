@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
-const Login = () => {
+const StudentLogin = () => {
   const [formData, setFormData] = useState({
     rollNo: '',
     password: ''
@@ -25,12 +25,8 @@ const Login = () => {
     try {
       const userData = await login(formData.rollNo, formData.password);
       
-      // Redirect based on role
-      if (userData.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/dashboard');
-      }
+      
+      navigate('/student/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {
@@ -44,7 +40,7 @@ const Login = () => {
         <h1 className="text-3xl font-bold text-primary mb-6 text-center">
           NITR Mess Plus
         </h1>
-        <h2 className="text-xl text-textDark mb-6 text-center">Login</h2>
+        <h2 className="text-xl text-textDark mb-6 text-center">Student Login</h2>
 
         {error && (
           <div className="bg-red-100 border border-accent text-accent px-4 py-3 rounded mb-4">
@@ -54,7 +50,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-textDark mb-2">Roll Number</label>
+            <label className="block text-textDark mb-2">Student Roll Number</label>
             <input
               type="text"
               name="rollNo"
@@ -62,7 +58,7 @@ const Login = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary"
               required
-              placeholder="e.g., 123CS1001"
+              placeholder="123CS0000"
             />
           </div>
 
@@ -74,6 +70,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary"
+              placeholder='password'
               required
             />
           </div>
@@ -89,7 +86,7 @@ const Login = () => {
 
         <p className="text-center mt-6 text-textDark">
           Don't have an account?{' '}
-          <Link to="/signup" className="text-primary hover:underline">
+          <Link to="/student/signup" className="text-primary hover:underline">
             Sign up here
           </Link>
         </p>
@@ -98,4 +95,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default StudentLogin;

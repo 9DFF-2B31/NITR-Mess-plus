@@ -5,8 +5,6 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    uppercase: true,
-    trim: true
   },
   password: {
     type: String,
@@ -16,13 +14,8 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  photo: {
-    public_id: String,
-    url: String
-  },
-  messName: {
-    type: String,
-    required: true
+  photoURL: {
+    type : String
   },
   tokens: {
     breakfast: {

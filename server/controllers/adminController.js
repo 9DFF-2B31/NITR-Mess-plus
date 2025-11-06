@@ -1,50 +1,61 @@
 const Booking = require('../models/Booking');
 
-// @desc    Get list of students who booked a specific meal for today
+// @desc    Get list of students who booked a specific meal for today & yesterday
 // @route   GET /api/admin/meal-list?meal=breakfast
 // @access  Private (Admin only)
 const getMealList = async (req, res) => {
   try {
-    const { meal } = req.query; // breakfast, lunch, snacks, or dinner
-
+    const { meal } = req.query;
     if (!meal || !['breakfast', 'lunch', 'snacks', 'dinner'].includes(meal)) {
       return res.status(400).json({ message: 'Invalid meal type' });
     }
 
-    // Get today's date (start of day)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Compute day boundaries in UTC (safe for MongoDB date comparison)
+    const now = new Date();
+    const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    const yesterdayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1));
+    const tomorrowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
 
-    // Find all bookings for today where:
-    // 1. The specific meal is booked (meals.breakfast = true)
-    // 2. The meal is NOT yet verified (verified.breakfast = false)
-    const filter = {
-      date: today,
+    // Fetch bookings for today
+    const bookingsToday = await Booking.find({
       [`meals.${meal}`]: true,
-      [`verified.${meal}`]: false
+      [`verified.${meal}`]: false,
+      date: { $gte: todayUTC, $lt: tomorrowUTC }
+    }).populate("student", "name rollNo photoURL");
+
+    // Fetch bookings for yesterday
+    const bookingsYesterday = await Booking.find({
+      [`meals.${meal}`]: true,
+      [`verified.${meal}`]: false,
+      date: { $gte: yesterdayUTC, $lt: todayUTC }
+    }).populate("student", "name rollNo photoURL");
+
+    const data = {
+      today: {
+        date: todayUTC,
+        count: bookingsToday.length,
+        students: bookingsToday.map(b => ({
+          bookingId: b._id,
+          name: b.student.name,
+          rollNo: b.student.rollNo,
+          photoURL: b.student.photoURL
+        }))
+      },
+      yesterday: {
+        date: yesterdayUTC,
+        count: bookingsYesterday.length,
+        students: bookingsYesterday.map(b => ({
+          bookingId: b._id,
+          name: b.student.name,
+          rollNo: b.student.rollNo,
+          photoURL: b.student.photoURL
+        }))
+      }
     };
 
-    const bookings = await Booking.find(filter)
-      .populate('student', 'rollNo name photo messName')
-      .sort({ 'student.rollNo': 1 });
-
-    // Format response
-    const studentList = bookings.map(booking => ({
-      bookingId: booking._id,
-      rollNo: booking.student.rollNo,
-      name: booking.student.name,
-      photo: booking.student.photo,
-      messName: booking.student.messName
-    }));
-
-    res.json({
-      meal,
-      date: today,
-      count: studentList.length,
-      students: studentList
-    });
+    res.status(200).json(data);
   } catch (error) {
-    console.error(error);
+    console.error("Error in getMealList:", error);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -64,38 +75,32 @@ const verifyMeal = async (req, res) => {
       return res.status(400).json({ message: 'Invalid meal type' });
     }
 
-    // Find booking
-    const booking = await Booking.findById(bookingId);
+    const booking = await Booking.findById(bookingId).populate('student', 'rollNo name', );
 
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
     }
 
-    // Check if meal was actually booked
     if (!booking.meals[meal]) {
       return res.status(400).json({ message: 'This meal was not booked' });
     }
 
-    // Check if already verified
     if (booking.verified[meal]) {
       return res.status(400).json({ message: 'This meal has already been verified' });
     }
 
-    // Mark as verified
     booking.verified[meal] = true;
     await booking.save();
 
     res.json({
-      message: 'Meal verified successfully',
+      message: `Meal '${meal}' verified successfully for ${booking.student.name}, (${booking.student.rollNo})`,
       booking
     });
+
   } catch (error) {
-    console.error(error);
+    console.error('Error in verifyMeal:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = {
-  getMealList,
-  verifyMeal
-};
+module.exports = { getMealList, verifyMeal };
