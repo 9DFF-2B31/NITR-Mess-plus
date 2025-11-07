@@ -7,11 +7,12 @@ import { ClipboardList, Ticket, Utensils } from "lucide-react";
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
 
+  // Updated gradient colors based on #C46243
   const TOKEN_COLORS = {
-    Breakfast: "from-orange-200 to-orange-400",
-    Lunch: "from-orange-300 to-orange-500",
-    Snacks: "from-orange-200 to-orange-400",
-    Dinner: "from-orange-300 to-orange-500",
+    Breakfast: "from-[#E17C5D] to-[#C46243]",
+    Lunch: "from-[#E17C5D] to-[#C46243]",
+    Snacks: "from-[#E17C5D] to-[#C46243]",
+    Dinner: "from-[#E17C5D] to-[#C46243]",
   };
 
   return (
@@ -19,8 +20,8 @@ const Dashboard = () => {
       <Navbar />
 
       <div className="container mx-auto px-6 py-10">
-        {/* Profile Card - Highlighted with gradient */}
-        <div className="bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-2xl shadow-2xl p-8 mb-10 flex items-center gap-6 border border-orange-300 transform transition hover:scale-105">
+        {/* Profile Card */}
+        <div className="bg-gradient-to-r from-[#E17C5D] to-[#C46243] text-white rounded-2xl shadow-2xl p-8 mb-10 flex items-center gap-6 border border-[#E17C5D] transform transition hover:scale-105">
           {user.photoURL ? (
             <img
               src={user.photoURL}
@@ -28,27 +29,31 @@ const Dashboard = () => {
               className="w-24 h-24 rounded-full object-cover border-4 border-white"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold bg-gradient-to-r from-orange-400 to-orange-600">
+            <div className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold bg-gradient-to-r from-[#E17C5D] to-[#C46243]">
               {user.name.charAt(0).toUpperCase()}
             </div>
           )}
 
           <div>
-            <h1 className="text-3xl font-extrabold mb-1 text-white">{user.name}</h1>
+            <h1 className="text-3xl font-extrabold mb-1 text-white">
+              {user.name}
+            </h1>
             <p className="font-medium">Roll No: {user.rollNo}</p>
             <p className="font-medium">Mess: GDB Hall</p>
           </div>
         </div>
 
-        {/* Action Cards - Clean white */}
+        {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <Link
             to="/view-menu"
             className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition transform hover:-translate-y-1"
           >
             <div className="text-center">
-              <ClipboardList className="mx-auto h-12 w-12 mb-4 text-orange-500" />
-              <h2 className="text-xl font-bold mb-1 text-gray-800">View Mess Menu</h2>
+              <ClipboardList className="mx-auto h-12 w-12 mb-4 text-[#C46243]" />
+              <h2 className="text-xl font-bold mb-1 text-gray-800">
+                View Mess Menu
+              </h2>
               <p className="text-gray-500 text-sm">Check today’s delicious menu</p>
             </div>
           </Link>
@@ -58,8 +63,10 @@ const Dashboard = () => {
             className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition transform hover:-translate-y-1"
           >
             <div className="text-center">
-              <Ticket className="mx-auto h-12 w-12 mb-4 text-orange-500" />
-              <h2 className="text-xl font-bold mb-1 text-gray-800">Check Current Tokens</h2>
+              <Ticket className="mx-auto h-12 w-12 mb-4 text-[#C46243]" />
+              <h2 className="text-xl font-bold mb-1 text-gray-800">
+                Check Current Tokens
+              </h2>
               <p className="text-gray-500 text-sm">View your current meal tokens</p>
             </div>
           </Link>
@@ -69,14 +76,16 @@ const Dashboard = () => {
             className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition transform hover:-translate-y-1"
           >
             <div className="text-center">
-              <Utensils className="mx-auto h-12 w-12 mb-4 text-orange-500" />
-              <h2 className="text-xl font-bold mb-1 text-gray-800">Book Meal Coupons</h2>
+              <Utensils className="mx-auto h-12 w-12 mb-4 text-[#C46243]" />
+              <h2 className="text-xl font-bold mb-1 text-gray-800">
+                Book Meal Coupons
+              </h2>
               <p className="text-gray-500 text-sm">Reserve your meals for tomorrow</p>
             </div>
           </Link>
         </div>
 
-        {/* Token Overview - Optional Highlight */}
+        {/* Token Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
           {[
             { label: "Breakfast", count: user.tokens.breakfast },
