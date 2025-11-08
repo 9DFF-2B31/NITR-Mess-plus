@@ -24,10 +24,18 @@ const ViewMenu = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-100 flex flex-col">
+      <div
+        className="min-h-screen flex flex-col"
+        style={{
+          background: 'linear-gradient(to bottom, #F9F5F3, #E8D7D2)',
+        }}
+      >
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-xl text-orange-700 font-semibold animate-pulse">
+          <div
+            className="text-xl font-semibold animate-pulse"
+            style={{ color: '#B95C40' }}
+          >
             🍽️ Loading Weekly Menu...
           </div>
         </div>
@@ -35,7 +43,16 @@ const ViewMenu = () => {
     );
   }
 
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const days = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ];
+
   const dayLabels = {
     monday: 'Monday',
     tuesday: 'Tuesday',
@@ -47,29 +64,55 @@ const ViewMenu = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-yellow-100">
+    <div
+      className="min-h-screen"
+      style={{
+        background: 'linear-gradient(to bottom, #F9F5F3, #F2E3DF)',
+      }}
+    >
       <Navbar />
 
       {/* Hero Banner */}
-      <div className="relative bg-gradient-to-r from-orange-600 to-amber-600 text-white py-12 shadow-md">
+      <div
+        className="relative text-white py-12 shadow-md"
+        style={{
+          background: 'linear-gradient(90deg, #B95C40, #A24A33)',
+        }}
+      >
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-3">
             🍴 Weekly Mess Menu
           </h1>
-          <p className="text-lg text-orange-100">
+          <p className="text-lg opacity-90">
             Stay updated with this week’s delicious meals at your hostel mess
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-400 to-amber-500" />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-2"
+          style={{
+            background: 'linear-gradient(90deg, #B95C40, #8C3B26)',
+          }}
+        />
       </div>
 
       {/* Content */}
       <div className="container mx-auto px-4 py-10">
-        <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-8 border border-amber-100">
+        <div
+          className="backdrop-blur-md rounded-2xl shadow-lg p-8 border"
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            borderColor: '#E8CFC5',
+          }}
+        >
           <div className="flex justify-end mb-6">
             <Link
               to="/student/dashboard"
-              className="text-orange-600 font-semibold hover:text-amber-700 transition"
+              className="font-semibold transition"
+              style={{
+                color: '#B95C40',
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.color = '#8C3B26')}
+              onMouseOut={(e) => (e.currentTarget.style.color = '#B95C40')}
             >
               ← Back to Dashboard
             </Link>
@@ -82,9 +125,14 @@ const ViewMenu = () => {
                 className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200"
               >
                 {/* Day Header */}
-                <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-4 flex items-center justify-between">
+                <div
+                  className="text-white px-6 py-4 flex items-center justify-between"
+                  style={{
+                    background: 'linear-gradient(90deg, #B95C40, #A44E36)',
+                  }}
+                >
                   <h2 className="text-2xl font-bold">{dayLabels[day]}</h2>
-                  <span className="text-sm font-light text-orange-100">
+                  <span className="text-sm font-light opacity-90">
                     🍚 Fresh | 🍛 Tasty | ☕ Energizing
                   </span>
                 </div>
@@ -92,8 +140,16 @@ const ViewMenu = () => {
                 {/* Meals Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bg-white p-6">
                   {/* Breakfast */}
-                  <div className="rounded-lg p-4 bg-gradient-to-br from-yellow-50 to-amber-100 hover:scale-[1.02] transition">
-                    <h3 className="text-lg font-bold text-amber-800 mb-3 flex items-center gap-2">
+                  <div
+                    className="rounded-lg p-4 hover:scale-[1.02] transition"
+                    style={{
+                      background: 'linear-gradient(135deg, #F4E1DA, #F9ECE7)',
+                    }}
+                  >
+                    <h3
+                      className="text-lg font-bold mb-3 flex items-center gap-2"
+                      style={{ color: '#B95C40' }}
+                    >
                       <span>🍳</span> Breakfast
                     </h3>
                     <ul className="text-sm text-gray-800 space-y-1">
@@ -104,8 +160,16 @@ const ViewMenu = () => {
                   </div>
 
                   {/* Lunch */}
-                  <div className="rounded-lg p-4 bg-gradient-to-br from-orange-50 to-orange-100 hover:scale-[1.02] transition">
-                    <h3 className="text-lg font-bold text-orange-800 mb-3 flex items-center gap-2">
+                  <div
+                    className="rounded-lg p-4 hover:scale-[1.02] transition"
+                    style={{
+                      background: 'linear-gradient(135deg, #F3DFD8, #F7EAE5)',
+                    }}
+                  >
+                    <h3
+                      className="text-lg font-bold mb-3 flex items-center gap-2"
+                      style={{ color: '#B95C40' }}
+                    >
                       <span>🍛</span> Lunch
                     </h3>
                     <ul className="text-sm text-gray-800 space-y-1">
@@ -116,8 +180,16 @@ const ViewMenu = () => {
                   </div>
 
                   {/* Snacks */}
-                  <div className="rounded-lg p-4 bg-gradient-to-br from-rose-50 to-red-100 hover:scale-[1.02] transition">
-                    <h3 className="text-lg font-bold text-red-800 mb-3 flex items-center gap-2">
+                  <div
+                    className="rounded-lg p-4 hover:scale-[1.02] transition"
+                    style={{
+                      background: 'linear-gradient(135deg, #F4E1DA, #F8EBE6)',
+                    }}
+                  >
+                    <h3
+                      className="text-lg font-bold mb-3 flex items-center gap-2"
+                      style={{ color: '#B95C40' }}
+                    >
                       <span>☕</span> Snacks
                     </h3>
                     <ul className="text-sm text-gray-800 space-y-1">
@@ -128,8 +200,16 @@ const ViewMenu = () => {
                   </div>
 
                   {/* Dinner */}
-                  <div className="rounded-lg p-4 bg-gradient-to-br from-amber-50 to-yellow-100 hover:scale-[1.02] transition">
-                    <h3 className="text-lg font-bold text-yellow-800 mb-3 flex items-center gap-2">
+                  <div
+                    className="rounded-lg p-4 hover:scale-[1.02] transition"
+                    style={{
+                      background: 'linear-gradient(135deg, #F6E4DD, #FAEFEB)',
+                    }}
+                  >
+                    <h3
+                      className="text-lg font-bold mb-3 flex items-center gap-2"
+                      style={{ color: '#B95C40' }}
+                    >
                       <span>🍽️</span> Dinner
                     </h3>
                     <ul className="text-sm text-gray-800 space-y-1">
